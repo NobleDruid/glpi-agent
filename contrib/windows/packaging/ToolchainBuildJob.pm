@@ -163,9 +163,10 @@ sub toolchain_build_steps {
                     'CFLAGS=-O2 -I<prefix>/include -mms-bitfields', 'LDFLAGS=-L<prefix>/lib',
                 ],
                 patches         => [
-                    'https://github.com/msys2/MINGW-packages/raw/master/mingw-w64-libiconv/0002-fix-cr-for-awk-in-configure.all.patch',
-                    'https://github.com/msys2/MINGW-packages/raw/master/mingw-w64-libiconv/0003-add-cp65001-as-utf8-alias.patch',
-                    'https://github.com/msys2/MINGW-packages/raw/master/mingw-w64-libiconv/fix-pointer-buf.patch',
+                    # Abundant Logic: pinned to the msys2 commit for libiconv 1.19 ('master' dropped fix-pointer-buf.patch with 1.19.1 -> 404)
+                    'https://github.com/msys2/MINGW-packages/raw/045d46aedb9fdbd93b0900b1e20c1a6c73f23072/mingw-w64-libiconv/0002-fix-cr-for-awk-in-configure.all.patch',
+                    'https://github.com/msys2/MINGW-packages/raw/045d46aedb9fdbd93b0900b1e20c1a6c73f23072/mingw-w64-libiconv/0003-add-cp65001-as-utf8-alias.patch',
+                    'https://github.com/msys2/MINGW-packages/raw/045d46aedb9fdbd93b0900b1e20c1a6c73f23072/mingw-w64-libiconv/fix-pointer-buf.patch',
                 ],
                 post_configure  => [
                     # We don't need to install man pages & binaries
