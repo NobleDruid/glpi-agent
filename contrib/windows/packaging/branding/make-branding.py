@@ -9,6 +9,7 @@ Writes, in contrib/windows/packaging/ (same filenames the upstream build expects
   agentexe.ico           icon embedded in glpi-agent.exe
   GLPI-Agent_Banner.bmp  493x58  top banner on installer pages (left side must stay light: black text)
   GLPI-Agent_Dialog.bmp  493x312 welcome/finish page (right side must stay light: black text)
+  share/html/logo.png, share/html/favicon.ico   agent status page (http://localhost:62354)
 and previews in branding/preview/.
 
 Source: abundantlogic-logo.png (1024x559) = blue circuit cube + black "ABUNDANT LOGIC" on an
@@ -159,6 +160,11 @@ bc = fit(CUBE, 48, 50)
 b.alpha_composite(bc, (493 - bc.width - 10, (58 - bc.height) // 2))
 banner = b.convert("RGB")
 banner.save(os.path.join(OUT, "GLPI-Agent_Banner.bmp"))
+
+# ---------------------------------------------------------------- agent local status page (http://localhost:62354)
+HTML = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(OUT))), "share", "html")
+icon_image(144).save(os.path.join(HTML, "logo.png"))          # site.css background, upstream is 144x144
+write_ico(os.path.join(HTML, "favicon.ico"), [16, 32, 48])
 
 # ---------------------------------------------------------------- previews with mock installer text
 m = dialog.copy()
