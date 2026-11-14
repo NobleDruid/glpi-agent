@@ -737,9 +737,9 @@ sub _tree2xml {
                 # Install GLPI-AgentMonitor only when required
                 $result .= $ident ."  ". qq[  <Condition>AGENTMONITOR=1 AND EXECMODE=1</Condition>\n];
                 # Add registry entry dedicated to GLPI-AgentMonitor autorun
-                $result .= $ident ."  ". qq[  <RegistryValue Root="HKLM" Key="$regpath" Name="GLPI-AgentMonitor" Type="string" Value="[#f_agentmonitor_exe]" />\n];
+                $result .= $ident ."  ". qq[  <RegistryValue Root="HKLM" Key="$regpath" Name="AbundantLogic-AgentMonitor" Type="string" Value="[#f_agentmonitor_exe]" />\n];
                 # Add Start menu shortcut for GLPI-AgentMonitor
-                $result .= $ident ."  ". qq[  <Shortcut Id="AgentMonitorStartMenu" Advertise="yes" Directory="ProgramMenuFolder" Name="GLPI Agent Monitor" WorkingDirectory="d_perl_bin" Icon="agentmonitor.ico" />\n];
+                $result .= $ident ."  ". qq[  <Shortcut Id="AgentMonitorStartMenu" Advertise="yes" Directory="ProgramMenuFolder" Name="Abundant Logic Agent Monitor" WorkingDirectory="d_perl_bin" Icon="agentmonitor.ico" />\n];
             }
             # Add dedicated component for registry just after feat_AGENT
             if ($this_feat eq "feat_AGENT") {
@@ -835,7 +835,7 @@ sub _gen_file_id {
   my ($self, $file) = @_;
   my $r;
   $r = "f_agent_exe"  if lc($file) eq 'perl\bin\glpi-agent.exe';
-  $r = "f_agentmonitor_exe"  if $file =~ /perl\\bin\\glpi-agentmonitor-x(86|64).exe/i;
+  $r = "f_agentmonitor_exe"  if $file =~ /perl\\bin\\abundantlogic-agentmonitor-x(86|64).exe/i;
   $r = "f_glpiagent"  if lc($file) eq 'glpi-agent.bat';
   return  $r // "f" . $self->{id_counter}++;
 }

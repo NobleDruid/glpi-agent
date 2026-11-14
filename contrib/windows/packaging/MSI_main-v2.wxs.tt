@@ -1195,9 +1195,9 @@
     </Directory>     <!-- TARGETDIR -->
 
 [%- IF bits==32 %]
-    <util:CloseApplication Id="CloseGlpiAgentMonitor" Target="GLPI-AgentMonitor-x86.exe" TerminateProcess="0" RebootPrompt="no"></util:CloseApplication>
+    <util:CloseApplication Id="CloseGlpiAgentMonitor" Target="AbundantLogic-AgentMonitor-x86.exe" TerminateProcess="0" RebootPrompt="no"></util:CloseApplication>
 [%- ELSE %]
-    <util:CloseApplication Id="CloseGlpiAgentMonitor" Target="GLPI-AgentMonitor-x64.exe" TerminateProcess="0" RebootPrompt="no"></util:CloseApplication>
+    <util:CloseApplication Id="CloseGlpiAgentMonitor" Target="AbundantLogic-AgentMonitor-x64.exe" TerminateProcess="0" RebootPrompt="no"></util:CloseApplication>
 [%- END %]
 
     <Feature Id="feat_MSI"  Title="!(loc.ProductTitle)" Description="!(loc.ProductDescription)" Level="1" Display="expand" Absent="disallow">

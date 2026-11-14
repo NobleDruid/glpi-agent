@@ -10,7 +10,7 @@ use constant {
     # Tag for dmidecode release on glpi-project/dmidecode
     DMIDECODE_VERSION  => "3.7",
     # Tag for Glpi-AgentMonitor release on glpi-project/glpi-agentmonitor
-    GAMONITOR_VERSION  => "1.5.1",
+    GAMONITOR_VERSION  => "1.5.1-al1",   # Abundant Logic build: NobleDruid/glpi-agentmonitor release tag
     PERL_BUILD_STEPS   => 13,
 };
 
@@ -271,10 +271,10 @@ sub build_job {
                     folder  => '<image_dir>/perl/bin',
                 },
                 {
-                    name    => 'GLPI-AgentMonitor',
-                    project	=> 'glpi-project/glpi-agentmonitor',
+                    name    => 'AbundantLogic-AgentMonitor',
+                    project	=> 'NobleDruid/glpi-agentmonitor',
                     release => GAMONITOR_VERSION,
-                    file    => 'GLPI-AgentMonitor-'.$arch.'.exe',
+                    file    => 'AbundantLogic-AgentMonitor-'.$arch.'.exe',
                     folder  => '<image_dir>/perl/bin',
                 },
             ],
