@@ -4,8 +4,11 @@ use strict;
 use warnings;
 
 our $VERSION = "1.21";
-our $PROVIDER = "GLPI";
-our $COMMENTS = [];
+our $PROVIDER = "AbundantLogic";
+our $COMMENTS = [
+    "Based on GLPI Agent 1.21",
+    "Abundant Logic build: https://github.com/NobleDruid/glpi-agent"
+];
 
 1;
 

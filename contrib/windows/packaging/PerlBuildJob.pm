@@ -205,9 +205,10 @@ sub build_job {
             ldopts   => [
                 [ 'perl', '-MConfig', '-e', 'print "-lperl$Config{api_revision}$Config{api_version}"' ],
             ],
+            # Abundant Logic: path is hard-coded upstream ("-for-<PROVIDER>-Agent"); must match $PROVIDER in lib/GLPI/Agent/Version.pm
             build    => [
-                [ qw( gcc -c iec61850_wrap.c -fPIC -I../src/common/inc -I../src/iec61850/inc -I../src/mms/inc -I../hal/inc -I../src/logging -I../src/r_session -Os -std=c99 -fwrapv -fno-strict-aliasing -mms-bitfields -IC:/Strawberry-perl-for-GLPI-Agent/perl/lib/CORE -fmax-errors=5 -Wno-deprecated-declarations ) ],
-                [ qw( gcc -s -shared -LC:/Strawberry-perl-for-GLPI-Agent/perl/lib/CORE iec61850_wrap.o ../build/src/libiec61850.a ../build/hal/libhal.a -lws2_32 <_ldopts> -o <_libdll> ) ],
+                [ qw( gcc -c iec61850_wrap.c -fPIC -I../src/common/inc -I../src/iec61850/inc -I../src/mms/inc -I../hal/inc -I../src/logging -I../src/r_session -Os -std=c99 -fwrapv -fno-strict-aliasing -mms-bitfields -IC:/Strawberry-perl-for-AbundantLogic-Agent/perl/lib/CORE -fmax-errors=5 -Wno-deprecated-declarations ) ],
+                [ qw( gcc -s -shared -LC:/Strawberry-perl-for-AbundantLogic-Agent/perl/lib/CORE iec61850_wrap.o ../build/src/libiec61850.a ../build/hal/libhal.a -lws2_32 <_ldopts> -o <_libdll> ) ],
             ],
             install     => [
                 { do => 'createdir', args => [ '<image_dir>/perl/vendor/lib/auto/<module>' ] },
@@ -336,11 +337,12 @@ sub build_job {
             plugin => 'Perl::Dist::GLPI::Agent::Step::OutputMSI',
             exclude  => [],
             #BEWARE: msi_upgrade_code is a fixed value for all same arch releases (for ever)
-            msi_upgrade_code    => $arch eq 'x64' ? '0DEF72A8-E5EE-4116-97DC-753718E19CD5' : '7F25A9A4-BCAE-4C15-822D-EAFBD752CFEC',
-            app_publisher       => "Teclib'",
-            url_about           => 'https://glpi-project.org/',
-            url_help            => 'https://glpi-project.org/discussions/',
-            msi_root_dir        => 'GLPI-Agent',
+            # Abundant Logic: own x64 UpgradeCode so official GLPI Agent installers never replace this one. NEVER change it.
+            msi_upgrade_code    => $arch eq 'x64' ? '8B93EF9F-227D-4942-88AB-09B34102892F' : '7F25A9A4-BCAE-4C15-822D-EAFBD752CFEC',
+            app_publisher       => "Abundant Logic",
+            url_about           => 'https://helpdesk.abundantlogic.com/',
+            url_help            => 'https://helpdesk.abundantlogic.com/',
+            msi_root_dir        => 'AbundantLogic-Agent',
             msi_main_icon       => 'contrib/windows/packaging/glpi-agent.ico',
             msi_license_rtf     => 'contrib/windows/packaging/gpl-2.0.rtf',
             msi_dialog_bmp      => 'contrib/windows/packaging/GLPI-Agent_Dialog.bmp',

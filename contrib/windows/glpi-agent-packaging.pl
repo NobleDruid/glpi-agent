@@ -11,7 +11,7 @@ use Data::UUID;
 
 use constant {
     PACKAGE_REVISION    => "1", #BEWARE: always start with 1
-    PROVIDED_BY         => "Teclib Edition",
+    PROVIDED_BY         => "Abundant Logic",
 };
 
 use lib abs_path(File::Spec->rel2abs('../packaging', __FILE__));
@@ -91,7 +91,7 @@ sub build_app {
         agent_fullver   => $major.'.'.$minor.'.'.$revision.'.'.$package_rev,
         agent_vernum    => $major.'.'.$minor.($revision ? '.'.$revision : ''),
         agent_vertag    => $versiontag // '',
-        agent_fullname  => $provider.' Agent',
+        agent_fullname  => 'Abundant Logic Agent',
         agent_rootdir   => $provider.'-Agent',
         agent_localguid => Data::UUID->new()->create_str(),
         agent_regpath   => "Software\\$provider-Agent",
