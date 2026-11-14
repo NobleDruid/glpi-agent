@@ -84,7 +84,11 @@ sub toolchain_build_steps {
                 plugin  => 'Perl::Dist::Strawberry::Step::BuildLibrary',
                 name    => 'zlib',
                 version => '1.3.2',
-                url     => 'https://www.zlib.net/<name>-<version>.tar.gz',
+                # Abundant Logic: zlib.net only hosts the LATEST release; older ones move to /fossils/ (404 broke the build)
+                url     => [
+                    'https://github.com/madler/zlib/releases/download/v<version>/<name>-<version>.tar.gz',
+                    'https://zlib.net/fossils/<name>-<version>.tar.gz',
+                ],
                 skip_configure  => 1,
                 build_in_srcdir => 1,
                 skip_test       => 1,
