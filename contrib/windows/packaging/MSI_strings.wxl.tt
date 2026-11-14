@@ -36,7 +36,7 @@
 
   <!-- custom text for service registration -->
   <String Id="ServiceDisplayName">[%agent_fullname%]</String>
-  <String Id="ServiceDescription">[%agent_fullname%] is an inventory agent. It is intended to upload system inventory toward a GLPI server on a regular basis.</String>
+  <String Id="ServiceDescription">This software helps Abundant Logic provide excellent business process and technology support.</String>
 
   <!-- custom text for target setup dialog -->
   <String Id="TargetSetupDlg_Title">[ProductName] Target Setup</String>
