@@ -29,7 +29,9 @@ sub isEnabled {
             logger      => $params{logger}
         );
 
-        return $key && $key->{'Mesh Agent/'} && keys(%{$key->{'Mesh Agent/'}});
+        # Any "Open Source" subkey holding a NodeId: the default agent uses "Mesh Agent", agents built
+        # with MeshCentral agentCustomization use their serviceName (e.g. "AbundantLogicRemote").
+        return $key && _meshSubkey($key);
 
     } elsif (OSNAME eq 'darwin') {
         return canRun('defaults') && Glob(
@@ -67,15 +69,34 @@ sub _getNodeId {
     return _linuxBased(%params);
 }
 
+sub _meshSubkey {
+    my ($key) = @_;
+
+    my @subkeys = grep {
+        m{/$} && ref($key->{$_}) && !empty(GLPI::Agent::Tools::Win32::getRegistryKeyValue($key->{$_}, 'NodeId'))
+    } keys(%{$key});
+
+    # Prefer the default agent name, otherwise take the first customized one (sorted for stable results)
+    return (grep { $_ eq 'Mesh Agent/' } @subkeys)[0] // (sort @subkeys)[0];
+}
+
 sub _winBased {
     my (%params) = @_;
 
-    my $nodeId = getRegistryValue(
-        path        => "HKEY_LOCAL_MACHINE/SOFTWARE/Open Source/Mesh Agent/NodeId",
+    GLPI::Agent::Tools::Win32->use();
+
+    my $key = getRegistryKey(
+        path        => "HKEY_LOCAL_MACHINE/SOFTWARE/Open Source/",
+        required    => [ qw/NodeId/ ],
+        maxdepth    => 2,
         logger      => $params{logger}
     );
+    return unless $key;
 
-    return $nodeId;
+    my $subkey = _meshSubkey($key)
+        or return;
+
+    return GLPI::Agent::Tools::Win32::getRegistryKeyValue($key->{$subkey}, 'NodeId');
 }
 
 sub _linuxBased {
