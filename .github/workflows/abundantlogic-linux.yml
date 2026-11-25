@@ -1,0 +1,78 @@
+name: Abundant Logic Agent - Linux deb
+
+# Builds the rebranded Debian/Ubuntu package "abundantlogic-agent" (Architecture: all, pure Perl).
+#  - Push to an abundantlogic-* branch or run manually -> test build, .deb attached to the run as an artifact
+#  - Push a tag like 1.21-al4                          -> .deb also attached to that tag's GitHub Release
+#    (the Windows workflow publishes the MSI to the same release)
+# The package version comes from the tag: tag 1.21-al4 -> deb version 1:1.21-al4, agent VERSION 1.21-al4.
+# Tests are skipped (nocheck): the Windows build covers them, and CPAN/network flakiness shouldn't block a release.
+
+on:
+  push:
+    branches: [ 'abundantlogic-*' ]
+    tags: [ '*-al*' ]
+  workflow_dispatch:
+
+jobs:
+  deb:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write   # needed to attach the .deb to the release on tag builds
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Version from tag (or branch build)
+      id: ver
+      run: |
+        if [[ "$GITHUB_REF" == refs/tags/* ]]; then V="${GITHUB_REF_NAME}"; else V="1.21-al0+git$(date -u +%Y%m%d%H%M)"; fi
+        echo "version=$V" >> "$GITHUB_OUTPUT"
+        echo "Package version: 1:$V"
+
+    - name: Install build dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends devscripts equivs build-essential fakeroot swig curl
+        sudo mk-build-deps -i -r -t "apt-get -y --no-install-recommends" debian/control
+
+    - name: Changelog entry for this version
+      env:
+        DEBEMAIL: 40224881+NobleDruid@users.noreply.github.com
+        DEBFULLNAME: Abundant Logic
+      run: |
+        dch --newversion "1:${{ steps.ver.outputs.version }}" --distribution unstable --force-distribution \
+            "Abundant Logic Agent ${{ steps.ver.outputs.version }} (branded build of GLPI Agent)"
+        head -5 debian/changelog
+
+    - name: Build package (arch-independent only)
+      env:
+        DEB_BUILD_OPTIONS: nocheck
+        DEB_AGENT_COMMENTS: "Abundant Logic build,Source: NobleDruid/glpi-agent ${{ github.ref_name }}"
+      run: dpkg-buildpackage -A -us -uc
+
+    - name: Check the package
+      run: |
+        mkdir -p out
+        cp ../abundantlogic-agent_*_all.deb out/
+        dpkg-deb -I out/abundantlogic-agent_*_all.deb
+        dpkg-deb -c out/abundantlogic-agent_*_all.deb | grep -E "systemd/system|usr/bin/glpi-agent$"
+        dpkg-deb -c out/abundantlogic-agent_*_all.deb | grep -q "lib/systemd/system/abundantlogic-agent.service"
+        (cd out && sha256sum *.deb | tee SHA256SUMS-deb)
+
+    - name: Upload .deb as run artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: AbundantLogic-Agent-Linux-deb
+        path: out/
+
+    - name: Attach to GitHub Release (tag builds only)
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        TAG="${GITHUB_REF_NAME}"
+        gh release view "$TAG" >/dev/null 2>&1 || \
+          gh release create "$TAG" --title "Abundant Logic Agent $TAG" \
+            --notes "Abundant Logic build of GLPI Agent (GPL-2.0). Source: this repository at tag $TAG." || true
+        gh release upload "$TAG" out/abundantlogic-agent_*_all.deb --clobber

@@ -49,8 +49,11 @@ Homepage: https://glpi-project.org/
 Vcs-Browser: https://github.com/glpi-project/glpi-agent
 Rules-Requires-Root: binary-targets
 
-Package: glpi-agent
+Package: abundantlogic-agent
 Architecture: all
+Provides: glpi-agent (= ${binary:Version})
+Conflicts: glpi-agent
+Replaces: glpi-agent
 Depends:
  ${misc:Depends},
  ${perl:Depends},
@@ -77,26 +80,19 @@ Depends:
  libdatetime-perl
 Suggests: smartmontools, read-edid
 Recommends: libio-socket-ssl-perl, dmidecode, hdparm, fdisk | util-linux (<< 2.29.2-3~), net-tools
-Description: hardware and software inventory tool (client)
- GLPI Agent is an application designed to help a network
- or system administrator to keep track of the hardware and software
- configurations of devices.
- This agent can collect information about from:
-  - the local machine (Inventory)
-  - the network using SNMP
-  - an VMware ESX or vCenter server
- The agent can be driven from different asset management software
- including GLPI, Rudder, Uranos, OCSInventory.
+Description: Abundant Logic Agent (hardware and software inventory)
+ This software helps Abundant Logic provide excellent business process and
+ technology support.
  .
- The agent can also be used to install new software and configuration
- changes.
+ It reports this computer's hardware and software inventory to the Abundant
+ Logic helpdesk (https://helpdesk.abundantlogic.com/). Based on GLPI Agent.
 
 Package: glpi-agent-task-esx
 Architecture: all
 Depends:
  ${misc:Depends},
  ${perl:Depends},
- glpi-agent (>= ${binary:Version}),
+ abundantlogic-agent (>= ${binary:Version}),
  libhttp-cookies-perl,
  libjson-pp-perl
 Description: ESX and ESXi inventory for GLPI Agent
@@ -112,7 +108,7 @@ Package: glpi-agent-task-deploy
 Architecture: all
 Depends:
  ${misc:Depends},
- glpi-agent (>= ${binary:Version}),
+ abundantlogic-agent (>= ${binary:Version}),
  libjson-pp-perl,
  liburi-perl,
  libfile-copy-recursive-perl,
@@ -130,7 +126,7 @@ Package: glpi-agent-task-collect
 Architecture: all
 Depends:
  ${misc:Depends},
- glpi-agent (>= ${binary:Version}),
+ abundantlogic-agent (>= ${binary:Version}),
 Description: collect task support for GLPI
  With this module, GLPI can collect desired datas, essentially
  files under Linux.
@@ -143,7 +139,7 @@ Depends:
  ${misc:Depends},
  ${perl:Depends},
  ucf,
- glpi-agent (>= ${binary:Version}),
+ abundantlogic-agent (>= ${binary:Version}),
  libcrypt-des-perl,
  libdigest-hmac-perl,
  libnet-ip-perl,

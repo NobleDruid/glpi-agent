@@ -31,7 +31,7 @@ override_dh_auto_build:
 	dh_auto_build
 
 	# Fix glpi-agent.service other service dependency
-	sed -ri -e 's/syslog.target\s*//' contrib/unix/glpi-agent.service
+	sed -ri -e 's/syslog.target\s*//' contrib/unix/abundantlogic-agent.service
 
 	# Build libiec61850 support
 	curl -L -o $(IEC61850_VERSION).tar.gz https://github.com/g-bougard/libiec61850/archive/refs/tags/$(IEC61850_VERSION).tar.gz

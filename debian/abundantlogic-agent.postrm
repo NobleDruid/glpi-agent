@@ -36,7 +36,7 @@ case "$1" in
         for conf in agent inventory-server-plugin ssl-server-plugin server-test-plugin \
             proxy-server-plugin proxy2-server-plugin basic-authentication-server-plugin
         do
-            ucfr --purge glpi-agent /etc/glpi-agent/$conf.cfg
+            ucfr --purge abundantlogic-agent /etc/glpi-agent/$conf.cfg
         done
     fi
 

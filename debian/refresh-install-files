@@ -8,7 +8,7 @@ use Config;
 
 my ($INSTALLVENDORARCH) = $Config{installvendorarch} =~ m{^/?([^/].+)$};
 
-open AGENT, ">debian/glpi-agent.install";
+open AGENT, ">debian/abundantlogic-agent.install";
 open AGENT_TASK_DEPLOY, ">debian/glpi-agent-task-deploy.install";
 open AGENT_TASK_NETWORK, ">debian/glpi-agent-task-network.install";
 open AGENT_TASK_ESX, ">debian/glpi-agent-task-esx.install";
@@ -49,7 +49,7 @@ print AGENT "etc/proxy2-server-plugin.cfg /usr/share/glpi-agent/etc\n";
 print AGENT "usr/share/glpi-agent/edid.ids\n";
 print AGENT "usr/share/glpi-agent/sysobject.ids\n";
 print AGENT "usr/share/glpi-agent/html\n";
-print AGENT "contrib/unix/glpi-agent.service lib/systemd/system\n";
+print AGENT "contrib/unix/abundantlogic-agent.service lib/systemd/system\n";
 
 # Dedicated network tasks configuration files
 print AGENT_TASK_NETWORK "etc/toolbox-plugin.cfg /usr/share/glpi-agent/etc\n";
