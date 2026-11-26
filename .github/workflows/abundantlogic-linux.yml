@@ -1,17 +1,23 @@
 name: Abundant Logic Agent - Linux deb
 
 # Builds the rebranded Debian/Ubuntu package "abundantlogic-agent" (Architecture: all, pure Perl).
-#  - Push to an abundantlogic-* branch or run manually -> test build, .deb attached to the run as an artifact
+#  - Run manually (gh workflow run abundantlogic-linux.yml --ref abundantlogic-1.21) -> test build, .deb as a run artifact
 #  - Push a tag like 1.21-al4                          -> .deb also attached to that tag's GitHub Release
 #    (the Windows workflow publishes the MSI to the same release)
 # The package version comes from the tag: tag 1.21-al4 -> deb version 1:1.21-al4, agent VERSION 1.21-al4.
 # Tests are skipped (nocheck): the Windows build covers them, and CPAN/network flakiness shouldn't block a release.
 
+# Builds only on release tags and manual runs (gh workflow run <file> --ref <branch>), not on every
+# branch push: GitHub pauses Actions on forks with heavy usage ("Workflows are not currently being
+# run on this fork due to the scale of GitHub Actions usage", 2026-11-26).
 on:
   push:
-    branches: [ 'abundantlogic-*' ]
     tags: [ '*-al*' ]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   deb:

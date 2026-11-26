@@ -6,11 +6,17 @@ name: Abundant Logic Agent - Windows MSI
 # Derived from upstream's glpi-agent-packaging.yml (windows-packaging job), without code signing.
 # BUILD_DIR must match "C:\Strawberry-perl-for-<PROVIDER>-Agent_build" (PROVIDER in lib/GLPI/Agent/Version.pm).
 
+# Builds only on release tags and manual runs (gh workflow run <file> --ref <branch>), not on every
+# branch push: GitHub pauses Actions on forks with heavy usage ("Workflows are not currently being
+# run on this fork due to the scale of GitHub Actions usage", 2026-11-26).
 on:
   push:
-    branches: [ 'abundantlogic-*' ]
     tags: [ '*-al*' ]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   BUILD_DIR: C:\Strawberry-perl-for-AbundantLogic-Agent_build
