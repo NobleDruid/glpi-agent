@@ -5,10 +5,8 @@ use warnings;
 
 our $VERSION = "1.21";
 our $PROVIDER = "AbundantLogic";
-our $COMMENTS = [
-    "Based on GLPI Agent 1.21",
-    "Abundant Logic build: https://github.com/NobleDruid/glpi-agent"
-];
+# Keep on ONE line: the Linux build (Makefile.PL install rule) replaces this line with a sed one-liner.
+our $COMMENTS = [ "Based on GLPI Agent 1.21", "Abundant Logic build: https://github.com/NobleDruid/glpi-agent" ];
 
 1;
 

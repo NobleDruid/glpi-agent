@@ -48,7 +48,8 @@ jobs:
     - name: Build package (arch-independent only)
       env:
         DEB_BUILD_OPTIONS: nocheck
-        DEB_AGENT_COMMENTS: "Abundant Logic build,Source: NobleDruid/glpi-agent ${{ github.ref_name }}"
+        # comma-separated; Makefile.PL strips anything but [a-zA-Z0-9 ,.:_-] (so no slashes)
+        DEB_AGENT_COMMENTS: "Based on GLPI Agent 1.21,Abundant Logic build ${{ github.ref_name }},Source: github.com NobleDruid glpi-agent"
       run: dpkg-buildpackage -A -us -uc
 
     - name: Check the package
@@ -58,6 +59,11 @@ jobs:
         dpkg-deb -I out/abundantlogic-agent_*_all.deb
         dpkg-deb -c out/abundantlogic-agent_*_all.deb | grep -E "systemd/system|usr/bin/glpi-agent$"
         dpkg-deb -c out/abundantlogic-agent_*_all.deb | grep -q "lib/systemd/system/abundantlogic-agent.service"
+        # the agent must actually run: compile-check the patched Version.pm and print the version
+        dpkg-deb -x out/abundantlogic-agent_*_all.deb pkgroot
+        perl -Ipkgroot/usr/share/glpi-agent/lib -c pkgroot/usr/share/glpi-agent/lib/GLPI/Agent/Version.pm
+        perl -Ipkgroot/usr/share/glpi-agent/lib -MGLPI::Agent::Version -e 'print "VERSION=$GLPI::Agent::Version::VERSION\n"; print "  $_\n" for @$GLPI::Agent::Version::COMMENTS'
+        perl -Ipkgroot/usr/share/glpi-agent/lib -c pkgroot/usr/bin/glpi-agent
         (cd out && sha256sum *.deb | tee SHA256SUMS-deb)
 
     - name: Upload .deb as run artifact
